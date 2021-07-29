@@ -37,11 +37,13 @@ app.get('/', (req, res) => {
 });
 
 // for users to login into their accounts
-app.post('/users/login', (req, res, next) => {});
+app.post('/users/login', (req, res, next) => {
+
+});
 
 // for registering of new users 
 app.post('/users/register', (req, res, next) => {
-    const {name:username, password} = req.body;
+    const {username, password} = req.body;
 
     // using callback
     UserModel.findOne({ username: username }, function (err, dts) {
