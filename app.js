@@ -22,13 +22,13 @@ mongoose.connect(process.env.DEVELOPMENT_DB_DSN, {useNewUrlParser: true, useUnif
 // Config of Middlewares
 app.use(cors({origin: '*'}))
 app.use(express.static('/public'));
-app.use(session({secret: "verygoodsecret", resave: false, saveUninitialized: true}));
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 
 //--start-- for passport
+app.use(session({secret: "verygoodsecret", resave: false, saveUninitialized: true}));
 app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.session());
 
 passport.serializeUser(function (user, done) {
 	done(null, user.id);
@@ -56,40 +56,55 @@ passport.use(new localStrategy(function (username, password, done) {
 //--end--
 
 app.get('/', (req, res) => {
-    console.log(req);
+    // console.log(req);
     res.send('<p>Welcome home </p>')
+});
+
+app.use(function(req, res, next) {
+    console.log(req.session);
+    next();
 });
 
 // for users to login into their accounts
 app.post('/users/login', (req, res, next) => {
-	passport.authenticate('local', function(err, user, info) {
-		if (err) { res.json({'msg':'bad', 'cause':`unkown error 1: ${err}`}); return next(); }
-		if (!user) { res.json({'msg':'bad', 'cause':'no user found on our database'}); return next(); }
+    const sess = req.session;
+    sess.cookie.loggedIn = true;
+    console.log('logged in', req.session);
+    res.json('done');
 
-		req.logIn(user, function(err) {
-			if (err) { res.json({'msg':'bad', 'cause':`unkown error 2: ${err}`}); return next(); }
-            res.json({'msg':'okay', 'cause':'success'}); return next();
-		});
-	})(req, res, next);
+	// passport.authenticate('local', function(err, user, info) {
+	// 	if (err) { res.json({'msg':'bad', 'cause':`unkown error 1: ${err}`}); return next(); }
+	// 	if (!user) { res.json({'msg':'bad', 'cause':'no user found on our database'}); return next(); }
+
+	// 	req.logIn(user, function(err) {
+	// 		if (err) { res.json({'msg':'bad', 'cause':`unkown error 2: ${err}`}); return next(); }
+    //         res.json({'msg':'okay', 'cause':'success'}); return next();
+	// 	});
+	// })(req, res, next);
+});
+
+app.post('/users/register', (req, res, next) => {
+    console.log('register', req.session)
+    res.json('done');
 });
 
 // for registering of new users 
-app.post('/users/register', (req, res, next) => {
-    const {username, password} = req.body;
+// app.post('/users/register', (req, res, next) => {
+//     const {username, password} = req.body;
 
-    UserModel.findOne({username: username}, function (err, dts) {
-        if (dts) { res.json({'msg':'error', 'cause':'The usename already exists in our database'}) }
-        else {
-            bcrypt.genSalt(10, function (err, salt) {
-                if (err) return next(err);
-                bcrypt.hash(password, salt, function (err, hash) {
-                    if (err) return next(err);
+//     UserModel.findOne({username: username}, function (err, dts) {
+//         if (dts) { res.json({'msg':'error', 'cause':'The usename already exists in our database'}) }
+//         else {
+//             bcrypt.genSalt(10, function (err, salt) {
+//                 if (err) return next(err);
+//                 bcrypt.hash(password, salt, function (err, hash) {
+//                     if (err) return next(err);
                     
-                    const newUser = new UserModel({username, 'password': hash});
-                    newUser.save();
-                    res.json({'msg':'okay'})
-                });
-            });
-        }
-    });
-});
+//                     const newUser = new UserModel({username, 'password': hash});
+//                     newUser.save();
+//                     res.json({'msg':'okay'})
+//                 });
+//             });
+//         }
+//     });
+// });
