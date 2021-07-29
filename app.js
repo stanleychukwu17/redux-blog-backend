@@ -30,7 +30,6 @@ app.use(express.json());
 //--end--
 
 app.get('/', (req, res) => {
-    // console.log(req);
     res.send('<p>Welcome home </p>')
 });
 
