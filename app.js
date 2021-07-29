@@ -1,9 +1,9 @@
 require('dotenv').config();
 const express			= require('express');
-const session			= require('express-session');
+// const session			= require('express-session');
 const mongoose			= require('mongoose');
-const passport			= require('passport');
-const localStrategy		= require('passport-local').Strategy;
+// const passport			= require('passport');
+// const localStrategy		= require('passport-local').Strategy;
 const bcrypt			= require('bcrypt');
 const cors              = require('cors');
 const app				= express();
@@ -26,33 +26,7 @@ app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 
 //--start-- for passport
-app.use(session({secret: "verygoodsecret", resave: false, saveUninitialized: true}));
-app.use(passport.initialize());
-// app.use(passport.session());
-
-passport.serializeUser(function (user, done) {
-	done(null, user.id);
-});
-
-passport.deserializeUser(function (id, done) {
-	UserModel.findById(id, function (err, user) {
-		done(err, user);
-	});
-});
-
-passport.use(new localStrategy(function (username, password, done) {
-	UserModel.findOne({ username: username }, function (err, user) {
-		if (err) return done(err);
-		if (!user) return done(null, false, { message: 'Incorrect username.' });
-
-		bcrypt.compare(password, user.password, function (err, res) {
-			if (err) return done(err);
-			if (res === false) return done(null, false, { message: 'Incorrect password.' });
-			
-			return done(null, user);
-		});
-	});
-}));
+// app.use(session({secret: "verygoodsecret", resave: false, saveUninitialized: true}));
 //--end--
 
 app.get('/', (req, res) => {
@@ -72,20 +46,17 @@ app.post('/users/login', (req, res, next) => {
     console.log('logged in', req.session);
     res.json('done');
 
-	// passport.authenticate('local', function(err, user, info) {
-	// 	if (err) { res.json({'msg':'bad', 'cause':`unkown error 1: ${err}`}); return next(); }
-	// 	if (!user) { res.json({'msg':'bad', 'cause':'no user found on our database'}); return next(); }
+	UserModel.findOne({ username: username }, function (err, user) {
+		if (err) return done(err);
+		if (!user) return done(null, false, { message: 'Incorrect username.' });
 
-	// 	req.logIn(user, function(err) {
-	// 		if (err) { res.json({'msg':'bad', 'cause':`unkown error 2: ${err}`}); return next(); }
-    //         res.json({'msg':'okay', 'cause':'success'}); return next();
-	// 	});
-	// })(req, res, next);
-});
-
-app.post('/users/register', (req, res, next) => {
-    console.log('register', req.session)
-    res.json('done');
+		bcrypt.compare(password, user.password, function (err, res) {
+			if (err) return done(err);
+			if (res === false) return done(null, false, { message: 'Incorrect password.' });
+			
+			return done(null, user);
+		});
+	});
 });
 
 // for registering of new users 
