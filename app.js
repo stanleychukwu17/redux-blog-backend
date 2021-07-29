@@ -40,20 +40,17 @@ app.use(function(req, res, next) {
 
 // for users to login into their accounts
 app.post('/users/login', (req, res, next) => {
-    const sess = req.session;
-    sess.cookie.loggedIn = true;
-    console.log('logged in', req.session);
-    res.json('done');
+    const {username, password} = req.body
 
-	UserModel.findOne({ username: username }, function (err, user) {
-		if (err) return done(err);
-		if (!user) return done(null, false, { message: 'Incorrect username.' });
+	UserModel.findOne({username: username}, function (err, user) {
+		if (err) res.json({'msg':'bad', 'cause':err});
+		if (!user) res.json({'msg':'bad', 'cause':'incorrect username received'});
 
 		bcrypt.compare(password, user.password, function (err, res) {
-			if (err) return done(err);
-			if (res === false) return done(null, false, { message: 'Incorrect password.' });
-			
-			return done(null, user);
+			if (err) res.json({'msg':'bad', 'cause':err});
+			if (res === false) res.json({'msg':'bad', 'cause':'Incorrect password'});
+
+			res.json({'msg':'okay'})
 		});
 	});
 });
