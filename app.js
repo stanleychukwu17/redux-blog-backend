@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express			= require('express');
-// const session			= require('express-session');
 const mongoose			= require('mongoose');
+// const session			= require('express-session');
 // const passport			= require('passport');
 // const localStrategy		= require('passport-local').Strategy;
 const bcrypt			= require('bcrypt');
@@ -10,6 +10,7 @@ const app				= express();
 
 // import the user model for registering a new user or Logging into a user account
 const UserModel = require('./models/UserModel')
+const UdtsModel = require('./models/SessModel')
 
 //--start-- connection to the mongodb server
 mongoose.set('useFindAndModify', false);
@@ -33,11 +34,6 @@ app.get('/', (req, res) => {
     res.send('<p>Welcome home </p>')
 });
 
-app.use(function(req, res, next) {
-    console.log(req.session);
-    next();
-});
-
 // for users to login into their accounts
 app.post('/users/login', (req, res, next) => {
     const {username, password} = req.body
@@ -46,11 +42,22 @@ app.post('/users/login', (req, res, next) => {
 		if (err) res.json({'msg':'bad', 'cause':err});
 		if (!user) res.json({'msg':'bad', 'cause':'incorrect username received'});
 
-		bcrypt.compare(password, user.password, function (err, res) {
+		bcrypt.compare(password, user.password, function (err, checked) {
 			if (err) res.json({'msg':'bad', 'cause':err});
-			if (res === false) res.json({'msg':'bad', 'cause':'Incorrect password'});
+			if (checked === false) res.json({'msg':'bad', 'cause':'Incorrect password'});
 
-			res.json({'msg':'okay'})
+            const date = new Date();
+            const toHash = date.getTime()+''+username;
+            const saltRounds = 10;
+            const salt = bcrypt.genSaltSync(saltRounds);
+            const hash = bcrypt.hashSync(toHash, salt);
+    
+            // Store hash in the session table for the user verification
+            // const udts = new UdtsModel({'uid':user._id, 'shash':user.password})
+            // udts.save().then( function (re) {
+
+            // });
+			res.json({'msg':'okay', 'hash':hash, 'uid':user._id});
 		});
 	});
 });
