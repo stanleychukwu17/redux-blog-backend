@@ -45,15 +45,15 @@ app.post('/users/register', (req, res, next) => {
 
     // using callback
     UserModel.findOne({ username: username }, function (err, dts) {
-        if (dts) { res.json({'msg':'error'}) }
+        if (dts) { res.json({'msg':'error', 'cause':'The usename already exists in our database'}) }
         else {
             bcrypt.genSalt(10, function (err, salt) {
                 if (err) return next(err);
                 bcrypt.hash(password, salt, function (err, hash) {
                     if (err) return next(err);
                     
-                    const newUserw = new UserModel({username, 'password': hash});
-                    newUserw.save();
+                    const newUser = new UserModel({username, 'password': hash});
+                    newUser.save();
                     res.json({'msg':'okay'})
                 });
             });
