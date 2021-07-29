@@ -15,7 +15,6 @@ const UserModel = require('./models/UserModel')
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 mongoose.connect(process.env.DEVELOPMENT_DB_DSN, {useNewUrlParser: true, useUnifiedTopology: true}).then(() => {
-    console.log('connected to the mongo db cloud')
     app.listen(8080, () => { console.log("Listening on port 8080"); });
 });
 //--end--
@@ -30,23 +29,55 @@ app.use(express.json());
 //--start-- for passport
 app.use(passport.initialize());
 app.use(passport.session());
+
+passport.serializeUser(function (user, done) {
+	done(null, user.id);
+});
+
+passport.deserializeUser(function (id, done) {
+	UserModel.findById(id, function (err, user) {
+		done(err, user);
+	});
+});
+
+passport.use(new localStrategy(function (username, password, done) {
+	UserModel.findOne({ username: username }, function (err, user) {
+		if (err) return done(err);
+		if (!user) return done(null, false, { message: 'Incorrect username.' });
+
+		bcrypt.compare(password, user.password, function (err, res) {
+			if (err) return done(err);
+			if (res === false) return done(null, false, { message: 'Incorrect password.' });
+			
+			return done(null, user);
+		});
+	});
+}));
 //--end--
 
 app.get('/', (req, res) => {
+    console.log(req);
     res.send('<p>Welcome home </p>')
 });
 
 // for users to login into their accounts
 app.post('/users/login', (req, res, next) => {
+	passport.authenticate('local', function(err, user, info) {
+		if (err) { res.json({'msg':'bad', 'cause':`unkown error 1: ${err}`}); return next(); }
+		if (!user) { res.json({'msg':'bad', 'cause':'no user found on our database'}); return next(); }
 
+		req.logIn(user, function(err) {
+			if (err) { res.json({'msg':'bad', 'cause':`unkown error 2: ${err}`}); return next(); }
+            res.json({'msg':'okay', 'cause':'success'}); return next();
+		});
+	})(req, res, next);
 });
 
 // for registering of new users 
 app.post('/users/register', (req, res, next) => {
     const {username, password} = req.body;
 
-    // using callback
-    UserModel.findOne({ username: username }, function (err, dts) {
+    UserModel.findOne({username: username}, function (err, dts) {
         if (dts) { res.json({'msg':'error', 'cause':'The usename already exists in our database'}) }
         else {
             bcrypt.genSalt(10, function (err, salt) {
