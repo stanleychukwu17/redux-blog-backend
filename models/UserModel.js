@@ -6,8 +6,4 @@ const UserSchema = mongoose.Schema({
   avatar: {type: String},
 }, { timestamps: true });
 
-// UserSchema.methods.comparePassword = async function comparePassword(candidate) {
-//   return bcrypt.compare(candidate, this.password);
-// };
-
 module.exports = mongoose.model('User', UserSchema);
