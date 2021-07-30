@@ -1,9 +1,6 @@
 require('dotenv').config();
 const express			= require('express');
 const mongoose			= require('mongoose');
-// const session			= require('express-session');
-// const passport			= require('passport');
-// const localStrategy		= require('passport-local').Strategy;
 const bcrypt			= require('bcrypt');
 const cors              = require('cors');
 const app				= express();
@@ -26,10 +23,6 @@ app.use(express.static('/public'));
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 
-//--start-- for passport
-// app.use(session({secret: "verygoodsecret", resave: false, saveUninitialized: true}));
-//--end--
-
 app.get('/', (req, res) => {
     res.send('<p>Welcome home </p>')
 });
@@ -39,12 +32,12 @@ app.post('/users/login', (req, res, next) => {
     const {username, password} = req.body
 
 	UserModel.findOne({username: username}, function (err, user) {
-		if (err) res.json({'msg':'bad', 'cause':err});
-		if (!user) res.json({'msg':'bad', 'cause':'incorrect username received'});
+		if (err) { res.json({'msg':'bad', 'cause':err}); return next(); }
+		if (!user) { res.json({'msg':'bad', 'cause':'incorrect username received'}); return next(); }
 
 		bcrypt.compare(password, user.password, function (err, checked) {
-			if (err) res.json({'msg':'bad', 'cause':err});
-			if (checked === false) res.json({'msg':'bad', 'cause':'Incorrect password'});
+			if (err) { res.json({'msg':'bad', 'cause':err}); return next(); }
+			if (checked === false) { res.json({'msg':'bad', 'cause':'Incorrect password'}); return next(); }
 
             const date = new Date();
             const toHash = date.getTime()+''+username;
@@ -53,32 +46,30 @@ app.post('/users/login', (req, res, next) => {
             const hash = bcrypt.hashSync(toHash, salt);
     
             // Store hash in the session table for the user verification
-            // const udts = new UdtsModel({'uid':user._id, 'shash':user.password})
-            // udts.save().then( function (re) {
-
-            // });
+            const udts = new UdtsModel({'uid':user._id, 'shash':user.password})
+            udts.save()
 			res.json({'msg':'okay', 'hash':hash, 'uid':user._id});
 		});
 	});
 });
 
 // for registering of new users 
-// app.post('/users/register', (req, res, next) => {
-//     const {username, password} = req.body;
+app.post('/users/register', (req, res, next) => {
+    const {username, password} = req.body;
 
-//     UserModel.findOne({username: username}, function (err, dts) {
-//         if (dts) { res.json({'msg':'error', 'cause':'The usename already exists in our database'}) }
-//         else {
-//             bcrypt.genSalt(10, function (err, salt) {
-//                 if (err) return next(err);
-//                 bcrypt.hash(password, salt, function (err, hash) {
-//                     if (err) return next(err);
+    UserModel.findOne({username: username}, function (err, dts) {
+        if (dts) { res.json({'msg':'error', 'cause':'The usename already exists in our database'}) }
+        else {
+            bcrypt.genSalt(10, function (err, salt) {
+                if (err) return next(err);
+                bcrypt.hash(password, salt, function (err, hash) {
+                    if (err) return next(err);
                     
-//                     const newUser = new UserModel({username, 'password': hash});
-//                     newUser.save();
-//                     res.json({'msg':'okay'})
-//                 });
-//             });
-//         }
-//     });
-// });
+                    const newUser = new UserModel({username, 'password': hash});
+                    newUser.save();
+                    res.json({'msg':'okay'})
+                });
+            });
+        }
+    });
+});
