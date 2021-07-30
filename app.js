@@ -8,6 +8,7 @@ const app				= express();
 // import the user model for registering a new user or Logging into a user account
 const UserModel = require('./models/UserModel')
 const UdtsModel = require('./models/SessModel')
+const BlogsModel = require('./models/BlogsModel')
 
 //--start-- connection to the mongodb server
 mongoose.set('useFindAndModify', false);
@@ -29,9 +30,9 @@ app.get('/', (req, res) => {
 
 // for posting of a new blog by a registered user
 app.post('/blogs/new-blog', (req, res, next) => {
+    const {title, dts, date_p} = req.body;
+
     console.log('body', req.body);
-    console.log('query', req.query);
-    console.log('new blog received');
     res.json('we don see am');
 });
 
