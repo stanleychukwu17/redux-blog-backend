@@ -7,8 +7,9 @@ const app				= express();
 
 // import the user model for registering a new user or Logging into a user account
 const UserModel = require('./models/UserModel')
-const UdtsModel = require('./models/SessModel')
+const UdtsModel = require('./models/SessModel'); // for storing of users hash for their login sessions
 const BlogsModel = require('./models/BlogsModel')
+const LmD = require('./models/BlogLikesModel')
 
 //--start-- connection to the mongodb server
 mongoose.set('useFindAndModify', false);
@@ -32,11 +33,23 @@ app.get('/', (req, res) => {
 // for returning of all the blogs posted
 app.get('/blogs/all-blogs', (req, res, next) => {
     const ret = [];
+    let blogId;
 
-    BlogsModel.find({}, function (err, docs) {
+    BlogsModel.find({}, async function (err, docs) {
         if (err) { res.json({'msg':'bad', 'cause':err}); return; }
-        ret.push(...docs);
-        res.json({'msg':'okay', 'dts':ret});
+        const promises = docs.map(async (ech) => {
+            const bambi = {...ech._doc};
+            const bcur = await LmD.blogs_ech_likes.find({blog: ech._id}).exec()
+
+            if (bcur.length > 0) { bambi.likes = bcur[0].likes; }
+            else {bambi.likes = 0}
+
+            return bambi;
+        })
+
+        Promise.all(promises).then(re => {
+            res.json({'msg':'okay', 'dts':re});
+        })
     });
 });
 
@@ -47,6 +60,22 @@ app.post('/blogs/new-blog', (req, res, next) => {
     const newBlog = new BlogsModel(req.body);
     newBlog.save();
     res.json({'msg':'okay'});
+});
+
+// for liking of blogs and updating the total likes of that particular blog
+app.post('/blogs/like-new-blog', async (req, res, next) => {
+    const {blog_id} = req.body
+
+    const bcur = await LmD.blogs_ech_likes.find({blog: blog_id}).exec();
+    if (bcur.length > 0) {
+        const newLikes = bcur[0].likes + 1;
+        const res = await LmD.blogs_ech_likes.updateOne({blog:blog_id}, { likes:newLikes});
+    } else {
+        const bcl = new LmD.blogs_ech_likes({'blog':blog_id, 'likes':1});
+        const saved = await bcl.save();
+    }
+
+    res.json({'msg':'okay'})
 });
 
 
