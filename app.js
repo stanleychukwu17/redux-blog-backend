@@ -30,7 +30,7 @@ app.get('/', (req, res) => {
 
 // for posting of a new blog by a registered user
 app.post('/blogs/new-blog', (req, res, next) => {
-    const {title, dts, date_p} = req.body;
+    const {title, content, date_p} = req.body;
 
     console.log('body', req.body);
     res.json('we don see am');
