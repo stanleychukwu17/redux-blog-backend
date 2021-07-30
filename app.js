@@ -36,7 +36,6 @@ app.get('/blogs/new-blog', (req, res, next) => {
 });
 
 
-
 // for users to login into their accounts
 app.post('/users/login', (req, res, next) => {
     const {username, password} = req.body
