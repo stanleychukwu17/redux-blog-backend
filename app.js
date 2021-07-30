@@ -28,12 +28,24 @@ app.get('/', (req, res) => {
     res.send('<p>Welcome home </p>')
 });
 
+
+// for returning of all the blogs posted
+app.get('/blogs/all-blogs', (req, res, next) => {
+    const ret = [];
+
+    BlogsModel.find({}, function (err, docs) {
+        if (err) { res.json({'msg':'bad', 'cause':err}); return; }
+        ret.push(...docs);
+        res.json({'msg':'okay', 'dts':ret});
+    });
+});
+
 // for posting of a new blog by a registered user
 app.post('/blogs/new-blog', (req, res, next) => {
     const {title, content, uid, date_p} = req.body;
 
-    // const newBlog = new BlogsModel(req.body);
-    // newBlog.save();
+    const newBlog = new BlogsModel(req.body);
+    newBlog.save();
     res.json({'msg':'okay'});
 });
 
