@@ -32,8 +32,9 @@ app.get('/', (req, res) => {
 app.post('/blogs/new-blog', (req, res, next) => {
     const {title, content, uid, date_p} = req.body;
 
-    console.log('body', req.body);
-    res.json('we don see am');
+    // const newBlog = new BlogsModel(req.body);
+    // newBlog.save();
+    res.json({'msg':'okay'});
 });
 
 
