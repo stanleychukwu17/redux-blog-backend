@@ -27,6 +27,16 @@ app.get('/', (req, res) => {
     res.send('<p>Welcome home </p>')
 });
 
+// for posting of a new blog by a registered user
+app.get('/blogs/new-blog', (req, res, next) => {
+    console.log('body', req.body);
+    console.log('query', req.query);
+    console.log('new blog received');
+    res.json('we don see am');
+});
+
+
+
 // for users to login into their accounts
 app.post('/users/login', (req, res, next) => {
     const {username, password} = req.body
