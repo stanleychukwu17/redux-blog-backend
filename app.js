@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
 });
 
 // for posting of a new blog by a registered user
-app.get('/blogs/new-blog', (req, res, next) => {
+app.post('/blogs/new-blog', (req, res, next) => {
     console.log('body', req.body);
     console.log('query', req.query);
     console.log('new blog received');
