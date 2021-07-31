@@ -45,7 +45,7 @@ app.get('/blogs/all-blogs', (req, res, next) => {
             const bcur = await LmD.blogs_ech_likes.find({blog: ech._id}).exec(); // searches the mongodb collection for each blog likes
             bambi.likes = (bcur.length > 0) ? (bcur[0].likes) : 0;
 
-            const buser = await UserModel.findById(ech._id, 'username'}).exec();
+            const buser = await UserModel.findById(ech._id, 'username').exec();
             console.log(bambi);
             return bambi;
         })
