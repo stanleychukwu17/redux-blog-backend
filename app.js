@@ -39,10 +39,10 @@ app.get('/blogs/all-blogs', (req, res, next) => {
         if (err) { res.json({'msg':'bad', 'cause':err}); return; }
         const promises = docs.map(async (ech) => {
             const bambi = {...ech._doc};
-            const bcur = await LmD.blogs_ech_likes.find({blog: ech._id}).exec()
 
-            if (bcur.length > 0) { bambi.likes = bcur[0].likes; }
-            else {bambi.likes = 0}
+            // fetches the total likes that this blog has received
+            const bcur = await LmD.blogs_ech_likes.find({blog: ech._id}).exec()
+            bambi.likes = (bcur.length > 0) ? (bcur[0].likes) : 0;
 
             return bambi;
         })
