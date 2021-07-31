@@ -47,7 +47,7 @@ app.get('/blogs/all-blogs', (req, res, next) => {
 
             const buser = await UserModel.findById(ech.uid, 'username').exec();
             if (buser) { bambi.author = buser.username; }
-            console.log(buser);
+            console.log(bambi);
             return bambi;
         })
 
