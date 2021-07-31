@@ -46,6 +46,7 @@ app.get('/blogs/all-blogs', (req, res, next) => {
             bambi.likes = (bcur.length > 0) ? (bcur[0].likes) : 0;
 
             const buser = await UserModel.findById(ech.uid, 'username').exec();
+            if (buser) { bambi.author = buser.username; }
             console.log(buser);
             return bambi;
         })
