@@ -37,15 +37,20 @@ app.get('/blogs/all-blogs', (req, res, next) => {
 
     BlogsModel.find({}, async function (err, docs) {
         if (err) { res.json({'msg':'bad', 'cause':err}); return; }
+
+        // fetches the total likes that this blog has received
         const promises = docs.map(async (ech) => {
             const bambi = {...ech._doc};
 
-            // fetches the total likes that this blog has received
-            const bcur = await LmD.blogs_ech_likes.find({blog: ech._id}).exec()
+            const bcur = await LmD.blogs_ech_likes.find({blog: ech._id}).exec(); // searches the mongodb collection for each blog likes
             bambi.likes = (bcur.length > 0) ? (bcur[0].likes) : 0;
 
+            // const buser = await UserModel.findById(ech._id, })
+            console.log(bambi);
             return bambi;
         })
+
+        // fetches the details of 
 
         Promise.all(promises).then(re => {
             res.json({'msg':'okay', 'dts':re});
