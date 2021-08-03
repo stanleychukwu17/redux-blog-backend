@@ -60,8 +60,11 @@ app.get('/blogs/all-blogs', (req, res, next) => {
 });
 
 // for returning of one blog
-app.get('/blogs/one-blog/:id', (req, res, next) => {
-    console.log(req.params.id)
+app.get('/blogs/one-blog/:id', async (req, res, next) => {
+    const blog_id = req.params.id;
+
+    const blogDts = await BlogsModel.findById(blogId).exec();
+    console.log(req.params.id, blogDts);
     res.json({'msg':'okay'});
 });
 
