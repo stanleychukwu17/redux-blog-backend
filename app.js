@@ -10,7 +10,7 @@ const UserModel = require('./models/UserModel')
 const UdtsModel = require('./models/SessModel'); // for storing of users hash for their login sessions
 const BlogsModel = require('./models/BlogsModel')
 const LmD = require('./models/BlogLikesModel')
-const utFunc = require('./function/andy')
+const utFunc = require('./pumba/ut')
 
 //--start-- connection to the mongodb server
 mongoose.set('useFindAndModify', false);
@@ -43,15 +43,13 @@ app.get('/blogs/all-blogs', (req, res, next) => {
         const promises = docs.map(async (ech) => {
             const bambi = {...ech._doc};
 
-            const bcur = await LmD.blogs_ech_likes.find({blog: ech._id}).exec(); // searches the mongodb collection for each blog likes
-            bambi.likes = (bcur.length > 0) ? (bcur[0].likes) : 0;
+            bambi.likes = await utFunc.get_likes_of_this_blog(ech._id);  // searches the mongodb collection for each blog likes
 
             const buser = await UserModel.findById(ech.uid, 'username').exec();
             if (buser) { bambi.author = buser.username; }
 
             return bambi;
         })
-
 
         Promise.all(promises).then(re => {
             res.json({'msg':'okay', 'dts':re});
@@ -64,6 +62,8 @@ app.get('/blogs/one-blog/:id', async (req, res, next) => {
     const blogId = req.params.id;
 
     const blogDts = await BlogsModel.findById(blogId).exec();
+    blogDts._doc.likes = await utFunc.get_likes_of_this_blog(blogId);  // searches the mongodb collection for each blog likes
+
     // console.log({...blogDts});
     res.json({'msg':'okay', 'dts':blogDts});
 });
