@@ -59,6 +59,12 @@ app.get('/blogs/all-blogs', (req, res, next) => {
     });
 });
 
+// for returning of one blog
+app.get('/blog/one-blog/', (req, res, next) => {
+
+    res.json({'msg':'okay'});
+});
+
 // for posting of a new blog by a registered user
 app.post('/blogs/new-blog', (req, res, next) => {
     const {title, content, uid, date_p} = req.body;
