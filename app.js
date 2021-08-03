@@ -64,8 +64,7 @@ app.get('/blogs/one-blog/:id', async (req, res, next) => {
     const blogId = req.params.id;
 
     const blogDts = await BlogsModel.findById(blogId).exec();
-    blogDts.call_me = 'charity';
-    console.log({...blogDts});
+    // console.log({...blogDts});
     res.json({'msg':'okay'});
 });
 
