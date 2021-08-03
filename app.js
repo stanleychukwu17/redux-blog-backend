@@ -65,7 +65,7 @@ app.get('/blogs/one-blog/:id', async (req, res, next) => {
 
     const blogDts = await BlogsModel.findById(blogId).exec();
     // console.log({...blogDts});
-    res.json({'msg':'okay'});
+    res.json({'msg':'okay', 'dts':blogDts});
 });
 
 // for posting of a new blog by a registered user
