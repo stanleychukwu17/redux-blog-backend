@@ -10,6 +10,7 @@ const UserModel = require('./models/UserModel')
 const UdtsModel = require('./models/SessModel'); // for storing of users hash for their login sessions
 const BlogsModel = require('./models/BlogsModel')
 const LmD = require('./models/BlogLikesModel')
+const utFunc = require('./function/andy')
 
 //--start-- connection to the mongodb server
 mongoose.set('useFindAndModify', false);
@@ -51,7 +52,6 @@ app.get('/blogs/all-blogs', (req, res, next) => {
             return bambi;
         })
 
-        // fetches the details of 
 
         Promise.all(promises).then(re => {
             res.json({'msg':'okay', 'dts':re});
