@@ -60,7 +60,7 @@ app.get('/blogs/all-blogs', (req, res, next) => {
 });
 
 // for returning of one blog
-app.get('/blog/one-blog/:id', (req, res, next) => {
+app.get('/blogs/one-blog/:id', (req, res, next) => {
     console.log(req.params.id)
     res.json({'msg':'okay'});
 });
