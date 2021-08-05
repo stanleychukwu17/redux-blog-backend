@@ -120,6 +120,10 @@ app.post('/users/login', (req, res, next) => {
 	});
 });
 
+app.post('/users/logout', (req, res, next) => {
+
+});
+
 // for registering of new users 
 app.post('/users/register', (req, res, next) => {
     const {username, password} = req.body;
