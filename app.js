@@ -121,9 +121,9 @@ app.post('/users/login', (req, res, next) => {
 });
 
 app.post('/users/logout', (req, res, next) => {
-    const {userId, hash} = req.body
+    const {uid, hash} = req.body
 
-    const ifAny = UdtsModel.findOne({'uid':userId, 'shash':hash}).exec()
+    const ifAny = UdtsModel.findOne({'uid':uid, 'shash':hash}).exec()
     console.log(ifAny)
 });
 
