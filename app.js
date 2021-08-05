@@ -113,7 +113,7 @@ app.post('/users/login', (req, res, next) => {
             const hash = bcrypt.hashSync(toHash, salt);
     
             // Store hash in the session table for the user verification
-            const udts = new UdtsModel({'uid':user._id, 'shash':user.password})
+            const udts = new UdtsModel({'uid':user._id, 'shash':hash})
             udts.save()
 			res.json({'msg':'okay', 'hash':hash, 'uid':user._id});
 		});
@@ -124,9 +124,12 @@ app.post('/users/logout', async (req, res, next) => {
     const {uid, hash} = req.body
 
     const any = await UdtsModel.findOne({'uid':uid}).exec()
-    if (any && any.shash == 'hash') { res.json({'msg':'okay'}) }
-    else { res.json({'msg':'bad', 'cause':'invalid user information received from your request'}) }
-    console.log(ifAny, uid, hash)
+    if (any && any._doc.shash == hash) {
+        UdtsModel.findOneAndDelete({'uid':uid, 'shash':hash}).exec();
+        res.json({'msg':'okay'})
+    } else {
+        res.json({'msg':'bad', 'cause':'invalid user information received from your request'})
+    }
 });
 
 // for registering of new users 
