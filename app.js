@@ -123,6 +123,8 @@ app.post('/users/login', (req, res, next) => {
 app.post('/users/logout', (req, res, next) => {
     const {userId, hash} = req.body
 
+    const ifAny = UdtsModel.findOne({'uid':userId, 'shash':hash}).exec()
+    console.log(ifAny)
 });
 
 // for registering of new users 
