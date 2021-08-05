@@ -120,11 +120,13 @@ app.post('/users/login', (req, res, next) => {
 	});
 });
 
-app.post('/users/logout', (req, res, next) => {
+app.post('/users/logout', async (req, res, next) => {
     const {uid, hash} = req.body
 
-    const ifAny = UdtsModel.findOne({'uid':uid, 'shash':hash}).exec()
-    console.log(ifAny)
+    const any = await UdtsModel.findOne({'uid':uid}).exec()
+    if (any && any.shash == 'hash') { res.json({'msg':'okay'}) }
+    else { res.json({'msg':'bad', 'cause':'invalid user information received from your request'}) }
+    console.log(ifAny, uid, hash)
 });
 
 // for registering of new users 
