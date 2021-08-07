@@ -93,6 +93,13 @@ app.post('/blogs/like-new-blog', async (req, res, next) => {
     res.json({'msg':'okay'})
 });
 
+// for posting of comment to a blog post
+app.post('/blogs/makeComment/', async (req, res, next) => {
+    console.log(req.body, req.params)
+    res.json({'msg':'okay'});
+});
+
+
 
 // for users to login into their accounts
 app.post('/users/login', (req, res, next) => {
@@ -120,6 +127,7 @@ app.post('/users/login', (req, res, next) => {
 	});
 });
 
+// when a user wants to logout
 app.post('/users/logout', async (req, res, next) => {
     const {uid, hash} = req.body
 
