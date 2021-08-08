@@ -11,7 +11,8 @@ const bt = {
     // gets the total comments on a blog using the id received
     get_comments_on_dis_blog : async (blogId) => {
         const bcur = await blogs_comments.find({blogId}).exec();
-        return {'total':bcur.length, 'comments':bcur}
+        if (bcur.length > 0) return {'total':bcur.length, 'comments':bcur}
+        return {'total':0, 'comments':[]}
     }
 }
 

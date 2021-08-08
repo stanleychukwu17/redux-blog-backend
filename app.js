@@ -63,9 +63,8 @@ app.get('/blogs/one-blog/:id', async (req, res, next) => {
 
     const blogDts = await BlogsModel.findById(blogId).exec();
     blogDts._doc.likes = await utFunc.get_likes_of_this_blog(blogId);  // get likes for this blog
-    comments = await utFunc.get_comments_on_dis_blog(blogId);
+    blogDts._doc.cdts = await utFunc.get_comments_on_dis_blog(blogId);
 
-    console.log(comments);
     res.json({'msg':'okay', 'dts':blogDts});
 });
 
