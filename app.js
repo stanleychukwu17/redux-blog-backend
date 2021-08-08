@@ -95,6 +95,8 @@ app.post('/blogs/like-new-blog', async (req, res, next) => {
 
 // for posting of comment to a blog post
 app.post('/blogs/makeComment/', async (req, res, next) => {
+    const blogs_comments = require('./models/Bcomments')
+
     console.log(req.body, req.params)
     res.json({'msg':'okay'});
 });
