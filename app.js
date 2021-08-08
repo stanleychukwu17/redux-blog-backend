@@ -59,20 +59,25 @@ app.get('/blogs/all-blogs', (req, res, next) => {
 
 // for returning of one blog
 app.get('/blogs/one-blog/:id', async (req, res, next) => {
+    var cdts, cd2, buser;
     const blogId = req.params.id;
 
     const blogDts = await BlogsModel.findById(blogId).exec();
     blogDts._doc.likes = await utFunc.get_likes_of_this_blog(blogId);  // get likes for this blog
 
     // blogDts._doc.
-    const cdts = await utFunc.get_comments_on_dis_blog(blogId);
-    if (cdts.total > 0) {
-        cdts.comments.forEach(async (ech) => {
-            console.log(ech)
-        })
-    } else {
 
+    cdts = await utFunc.get_comments_on_dis_blog(blogId);
+    if (cdts.total > 0) {
+        cd2 = cdts.comments.map(async (ech) => {
+            buser = await UserModel.findById(ech.userId, 'username').exec();
+            return {'name':buser.username, ...ech._doc}
+        })
     }
+
+    Promise.all(cd2).then(res => {
+        console.log(res);
+    });
 
     res.json({'msg':'okay', 'dts':blogDts});
 });
