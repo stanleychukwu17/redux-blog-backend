@@ -98,7 +98,6 @@ app.post('/blogs/makeComment/', async (req, res, next) => {
     const blogs_comments = require('./models/Bcomments')
     const  {id:blogId, userId, comment} = req.body
 
-    console.log(blogId, userId, comment)
     const newComment = new blogs_comments({blogId, userId, comment});
     newComment.save().then(re => {
         res.json({'msg':'okay', ...re._doc});
