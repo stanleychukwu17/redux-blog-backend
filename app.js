@@ -62,7 +62,7 @@ app.get('/blogs/one-blog/:id', async (req, res, next) => {
     const blogId = req.params.id;
 
     const blogDts = await BlogsModel.findById(blogId).exec();
-    blogDts._doc.likes = await utFunc.get_likes_of_this_blog(blogId);  // searches the mongodb collection for each blog likes
+    blogDts._doc.likes = await utFunc.get_likes_of_this_blog(blogId);  // get likes for this blog
 
     // console.log({...blogDts});
     res.json({'msg':'okay', 'dts':blogDts});
