@@ -59,13 +59,11 @@ app.get('/blogs/all-blogs', (req, res, next) => {
 
 // for returning of one blog
 app.get('/blogs/one-blog/:id', async (req, res, next) => {
-    var cdts, cd2, buser;
+    var cdts, cd2 = [], buser;
     const blogId = req.params.id;
 
     const blogDts = await BlogsModel.findById(blogId).exec();
     blogDts._doc.likes = await utFunc.get_likes_of_this_blog(blogId);  // get likes for this blog
-
-    // blogDts._doc.
 
     cdts = await utFunc.get_comments_on_dis_blog(blogId);
     if (cdts.total > 0) {
@@ -75,11 +73,11 @@ app.get('/blogs/one-blog/:id', async (req, res, next) => {
         })
     }
 
-    Promise.all(cd2).then(res => {
-        console.log(res);
+    Promise.all(cd2).then(val => {
+        cdts.comments = val;
+        blogDts._doc.cdts = cdts;
+        res.json({'msg':'okay', 'dts':blogDts});
     });
-
-    res.json({'msg':'okay', 'dts':blogDts});
 });
 
 // for posting of a new blog by a registered user
