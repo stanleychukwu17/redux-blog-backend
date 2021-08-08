@@ -101,7 +101,7 @@ app.post('/blogs/makeComment/', async (req, res, next) => {
     const newComment = new blogs_comments({blogId, userId, comment});
     newComment.save().then(re => {
         res.json({'msg':'okay', ...re._doc});
-});
+    });
 });
 
 
