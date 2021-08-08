@@ -84,7 +84,7 @@ app.post('/blogs/like-new-blog', async (req, res, next) => {
     const bcur = await LmD.blogs_ech_likes.find({blog: blog_id}).exec();
     if (bcur.length > 0) {
         const newLikes = bcur[0].likes + 1;
-        const res = await LmD.blogs_ech_likes.updateOne({blog:blog_id}, { likes:newLikes});
+        const res = await LmD.blogs_ech_likes.updateOne({blog:blog_id}, {likes:newLikes});
     } else {
         const bcl = new LmD.blogs_ech_likes({'blog':blog_id, 'likes':1});
         const saved = await bcl.save();
@@ -96,9 +96,14 @@ app.post('/blogs/like-new-blog', async (req, res, next) => {
 // for posting of comment to a blog post
 app.post('/blogs/makeComment/', async (req, res, next) => {
     const blogs_comments = require('./models/Bcomments')
+    const  {id:blogId, userId, comment} = req.body
 
-    console.log(req.body, req.params)
-    res.json({'msg':'okay'});
+    console.log(blogId, userId, comment)
+    const newComment = new blogs_comments({blogId, userId, comment});
+    newComment.save().then(re => {
+        console.log(re);
+        res.json({'msg':'okay'});
+});
 });
 
 
