@@ -1,5 +1,6 @@
 const LmD = require('../models/BlogLikesModel')
 const blogs_comments = require('../models/Bcomments')
+const all_activities = require('../models/aActivities')
 
 const bt = {
     get_likes_of_this_blog : async (blogId = 0) => {
@@ -16,7 +17,8 @@ const bt = {
     },
 
     saveThisActivity : async (obj) => {
-        console.log(obj)
+        const newActivity = new all_activities(obj);
+        return newActivity.save();
     }
 }
 

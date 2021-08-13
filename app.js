@@ -112,7 +112,7 @@ app.post('/blogs/makeComment/', async (req, res, next) => {
 
     const newComment = new blogs_comments({blogId, userId, comment});
     newComment.save().then(re => {
-        utFunc.saveThisActivity({'wch':'new_blog_comment', 'id1':blogId, 'id2':re._doc._id})
+        utFunc.saveThisActivity({'wch':'new_blog_comment', 'id1':userId, 'id2':blogId, 'id3':re._doc._id})
         res.json({'msg':'okay', ...re._doc});
     });
 });
