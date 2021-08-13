@@ -122,6 +122,7 @@ app.post('/blogs/deleteComment', async (req, res, next) => {
     const  {comId, userId} = req.body
 
     console.log(comId, userId, req.body)
+    blogs_comments.findOneAndDelete({_id: comId, userId});
     res.json({'msg':'okay'})
 })
 
