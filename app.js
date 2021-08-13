@@ -116,6 +116,8 @@ app.post('/blogs/makeComment/', async (req, res, next) => {
     });
 });
 
+// for deleting of comments 
+
 
 
 // for users to login into their accounts
