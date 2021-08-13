@@ -116,7 +116,8 @@ app.post('/blogs/makeComment/', async (req, res, next) => {
     });
 });
 
-// for deleting of comments 
+// for deleting of comments on a blog post
+
 
 
 
