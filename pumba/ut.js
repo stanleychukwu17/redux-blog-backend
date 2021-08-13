@@ -13,6 +13,10 @@ const bt = {
         const bcur = await blogs_comments.find({blogId}).sort({createdAt: -1}).exec();
         if (bcur.length > 0) return {'total':bcur.length, 'comments':bcur}
         return {'total':0, 'comments':[]}
+    },
+
+    saveThisActivity : async (obj) => {
+        console.log(obj)
     }
 }
 
