@@ -118,6 +118,9 @@ app.post('/blogs/makeComment/', async (req, res, next) => {
 
 // for deleting of comments on a blog post
 app.post('/blogs/deleteComment', async (req, res, next) => {
+    const blogs_comments = require('./models/Bcomments')
+    const  {comId, userId} = req.body
+
     res.json({'msg':'okay'})
 })
 
