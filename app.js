@@ -128,8 +128,8 @@ app.post('/blogs/deleteComment', async (req, res, next) => {
 
 
 // for fetching of the activities section at the side of the page
-app.post('/activities', async (req, res, next) => {
-    
+app.post('/activities/', async (req, res, next) => {
+
 })
 
 // for users to login into their accounts
