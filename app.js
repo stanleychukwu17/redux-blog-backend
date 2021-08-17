@@ -128,7 +128,8 @@ app.post('/blogs/deleteComment', async (req, res, next) => {
 
 
 // for fetching of the activities section at the side of the page
-app.post('/activities/getSiteActivities/', async (req, res, next) => {
+app.get('/activities/getActivities/', async (req, res, next) => {
+    console.log('request received for the man')
     res.json({'msg':'okay', 'cause':'getting you the activities now sir'})
 })
 
