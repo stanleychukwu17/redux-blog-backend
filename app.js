@@ -129,7 +129,7 @@ app.post('/blogs/deleteComment', async (req, res, next) => {
 
 // for fetching of the activities section at the side of the page
 app.post('/activities/getSiteActivities/', async (req, res, next) => {
-
+    res.json({'msg':'okay'})
 })
 
 // for users to login into their accounts
