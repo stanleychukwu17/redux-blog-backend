@@ -127,7 +127,7 @@ app.post('/blogs/deleteComment', async (req, res, next) => {
 })
 
 
-
+// for activities
 
 
 // for users to login into their accounts
