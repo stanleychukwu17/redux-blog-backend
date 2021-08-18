@@ -129,6 +129,7 @@ app.post('/blogs/deleteComment', async (req, res, next) => {
 
 // for fetching of the activities section at the side of the page
 app.get('/activities/getActivities/', async (req, res, next) => {
+    
     res.json({'msg':'okay', 'cause':'getting you the activities now sir'})
 })
 
