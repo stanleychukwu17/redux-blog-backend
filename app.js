@@ -136,7 +136,9 @@ app.get('/activities/getActivities/', async (req, res, next) => {
     aDts.forEach(async (ab) => {
         const wch = ab.wch, userId = ab.id1, id2 = ab.id1;
 
-        const udts = await actTxt
+        const udts = await utFunc.get_this_user_details(userId)
+
+        console.log(udts);
         // arrange the link for the new blog, put the statement out
         if (wch === 'new_blog_comment') {
             // actTxt = `${uname} commented on a blog post`;
