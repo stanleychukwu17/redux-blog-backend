@@ -131,7 +131,11 @@ app.post('/blogs/deleteComment', async (req, res, next) => {
 // for fetching of the activities section at the side of the page
 app.get('/activities/getActivities/', async (req, res, next) => {
     const act_dts = await ActsModel.find().exec();
-    console.log(act_dts);
+
+    act_dts.forEach(async (d1) => {
+        console.log(d1);
+    })
+
     res.json({'msg':'okay', 'cause':'getting you the activities now sir'})
 })
 
