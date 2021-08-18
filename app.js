@@ -109,7 +109,7 @@ app.post('/blogs/like-new-blog', async (req, res, next) => {
 // for adding of comment to a blog post
 app.post('/blogs/makeComment/', async (req, res, next) => {
     const blogs_comments = require('./models/Bcomments')
-    const  {id:blogId, userId, comment} = req.body
+    const {id:blogId, userId, comment} = req.body
 
     const newComment = new blogs_comments({blogId, userId, comment});
     newComment.save().then(re => {
@@ -136,6 +136,7 @@ app.get('/activities/getActivities/', async (req, res, next) => {
     aDts.forEach(async (ab) => {
         const wch = ab.wch, userId = ab.id1, id2 = ab.id1;
 
+        const udts = await actTxt
         // arrange the link for the new blog, put the statement out
         if (wch === 'new_blog_comment') {
             // actTxt = `${uname} commented on a blog post`;
