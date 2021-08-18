@@ -9,6 +9,7 @@ const app				= express();
 const UserModel = require('./models/UserModel')
 const UdtsModel = require('./models/SessModel'); // for storing of users hash for their login sessions
 const BlogsModel = require('./models/BlogsModel')
+const ActsModel = require('./models/aActivities')
 const LmD = require('./models/BlogLikesModel')
 const utFunc = require('./pumba/ut')
 
@@ -129,7 +130,8 @@ app.post('/blogs/deleteComment', async (req, res, next) => {
 
 // for fetching of the activities section at the side of the page
 app.get('/activities/getActivities/', async (req, res, next) => {
-    
+    const act_dts = await ActsModel.find().exec();
+    console.log(act_dts);
     res.json({'msg':'okay', 'cause':'getting you the activities now sir'})
 })
 
