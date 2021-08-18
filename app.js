@@ -137,8 +137,8 @@ app.get('/activities/getActivities/', async (req, res, next) => {
         const wch = ab.wch, userId = ab.id1, id2 = ab.id1;
 
         // arrange the link for the new blog, put the statement out
-        if (wch == 'new_blog_comment') {
-
+        if (wch === 'new_blog_comment') {
+            // actTxt = `${uname} commented on a blog post`;
         }
         console.log(ab.wch, ab.id1);
     })
