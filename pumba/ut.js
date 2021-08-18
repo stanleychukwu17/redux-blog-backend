@@ -1,7 +1,7 @@
 const LmD = require('../models/BlogLikesModel')
 const blogs_comments = require('../models/Bcomments')
 const all_activities = require('../models/aActivities')
-const UserModel = require('./models/UserModel')
+const UserModel = require('../models/UserModel')
 
 const bt = {
     get_likes_of_this_blog : async (blogId = 0) => {
