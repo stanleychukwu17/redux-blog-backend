@@ -131,7 +131,7 @@ app.post('/blogs/deleteComment', async (req, res, next) => {
 // for fetching of the activities section at the side of the page
 app.get('/activities/getActivities/', async (req, res, next) => {
     const aDts = await ActsModel.find().exec();
-    let fin = {}, actTxt = '', url ='';
+    let ret = [], actTxt = '', url ='';
 
     aDts.forEach(async (ab) => {
         const {wch, id1:userId, id2, id3} = ab;
