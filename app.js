@@ -131,20 +131,20 @@ app.post('/blogs/deleteComment', async (req, res, next) => {
 // for fetching of the activities section at the side of the page
 app.get('/activities/getActivities/', async (req, res, next) => {
     const aDts = await ActsModel.find().exec();
-    let fin = {}, actTxt = '', link;
+    let fin = {}, actTxt = '', url ='';
 
     aDts.forEach(async (ab) => {
-        const wch = ab.wch, userId = ab.id1, id2 = ab.id1;
+        const {wch, id1:userId, id2, id3} = ab;
 
         const {name} = await utFunc.get_this_user_details(userId);
 
         // arrange the link for the new blog, put the statement out
         if (wch === 'new_blog_comment') {
             actTxt = `${name} commented on a blog post`;
-            url = `http://localhost:3000/BlogPage/${id2}`
+            url = `http://localhost:3000/BlogPage/${id2}?toComment=yes&commentId=${id3}`
         }
 
-        fin = {name, actTxt}
+        fin = {name, actTxt, url}
         console.log(fin);
     })
 
