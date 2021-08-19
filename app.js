@@ -136,7 +136,7 @@ app.get('/activities/getActivities/', async (req, res, next) => {
     aDts.forEach(async (ab) => {
         const {wch, id1:userId, id2, id3} = ab;
 
-        // fetch the details of the user
+        // fetch the details of the user who added the activity
         const {name} = await utFunc.get_this_user_details(userId);
 
         // arrange the link for the new blog, put the statement out
