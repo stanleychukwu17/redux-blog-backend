@@ -143,12 +143,14 @@ app.get('/activities/getActivities/', async (req, res, next) => {
         if (wch === 'new_blog_comment') {
             actTxt = `${name} commented on a blog post`;
             url = `http://localhost:3000/BlogPage/${id2}?toComment=yes&commentId=${id3}`
+        } else if (wch) {
+            
         }
 
         ret.push({name, actTxt, url})
     })
 
-    res.json({'msg':'okay', 'cause':'getting you the activities now sir'})
+    res.json({'msg':'okay', 'cause':'getting you the activities now sir', ret})
 })
 
 // for users to login into their accounts
