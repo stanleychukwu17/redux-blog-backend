@@ -131,7 +131,7 @@ app.post('/blogs/deleteComment', async (req, res, next) => {
 // for fetching of the activities section at the side of the page
 app.get('/activities/getActivities/', async (req, res, next) => {
     const aDts = await ActsModel.find().exec();
-    let fin = {}, actTxt = '';
+    let fin = {}, actTxt = '', link;
 
     aDts.forEach(async (ab) => {
         const wch = ab.wch, userId = ab.id1, id2 = ab.id1;
@@ -141,6 +141,7 @@ app.get('/activities/getActivities/', async (req, res, next) => {
         // arrange the link for the new blog, put the statement out
         if (wch === 'new_blog_comment') {
             actTxt = `${name} commented on a blog post`;
+            url = `http://localhost:3000/BlogPage/${id2}`
         }
 
         fin = {name, actTxt}
