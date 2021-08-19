@@ -131,8 +131,10 @@ app.post('/blogs/deleteComment', async (req, res, next) => {
 // for fetching of the activities section at the side of the page
 app.get('/activities/getActivities/', async (req, res, next) => {
     const aDts = await ActsModel.find().exec();
-    let ret = [], actTxt = '', url ='';
+    let actTxt = '', url ='';
+    var ret = [];
 
+    // use promise to resolve the info not going back to the client side
     aDts.forEach(async (ab) => {
         const {wch, id1:userId, id2, id3} = ab;
 
@@ -149,6 +151,7 @@ app.get('/activities/getActivities/', async (req, res, next) => {
 
         ret.push({name, actTxt, url})
     })
+
 
     res.json({'msg':'okay', 'cause':'getting you the activities now sir', ret})
 })
