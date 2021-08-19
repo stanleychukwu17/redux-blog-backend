@@ -143,7 +143,7 @@ app.get('/activities/getActivities/', async (req, res, next) => {
         if (wch === 'new_blog_comment') {
             actTxt = `${name} commented on a blog post`;
             url = `http://localhost:3000/BlogPage/${id2}?toComment=yes&commentId=${id3}`
-        } else if (wch === '') {
+        } else if (wch === 'posted_new_blog_post') {
 
         }
 
