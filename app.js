@@ -145,7 +145,7 @@ app.get('/activities/getActivities/', async (req, res, next) => {
             url = `http://localhost:3000/BlogPage/${id2}?toComment=yes&commentId=${id3}`
         }
 
-        fin = {name, actTxt, url}
+        ret.push({name, actTxt, url})
     })
 
     res.json({'msg':'okay', 'cause':'getting you the activities now sir'})
