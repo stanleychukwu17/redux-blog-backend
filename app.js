@@ -146,7 +146,6 @@ app.get('/activities/getActivities/', async (req, res, next) => {
         }
 
         fin = {name, actTxt, url}
-        console.log(fin);
     })
 
     res.json({'msg':'okay', 'cause':'getting you the activities now sir'})
