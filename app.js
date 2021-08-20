@@ -135,8 +135,8 @@ app.get('/activities/getActivities/', async (req, res, next) => {
     var ret = [];
 
     // use promise to resolve the info not going back to the client side
-    aDts.forEach(async (ab) => {
-        const {wch, id1:userId, id2, id3} = ab;
+    ret = aDts.map(async (ab) => {
+        const {_id:id, wch, id1:userId, id2, id3} = ab;
 
         // fetch the details of the user who added the activity
         const {name} = await utFunc.get_this_user_details(userId);
@@ -144,16 +144,18 @@ app.get('/activities/getActivities/', async (req, res, next) => {
         // arrange the link for the new blog, put the statement out
         if (wch === 'new_blog_comment') {
             actTxt = `${name} commented on a blog post`;
-            url = `http://localhost:3000/BlogPage/${id2}?toComment=yes&commentId=${id3}`
+            url = `/BlogPage/${id2}?toComment=yes&commentId=${id3}`
         } else if (wch === 'posted_new_blog_post') {
 
         }
 
-        ret.push({name, actTxt, url})
+        return {id, name, actTxt, url};
     })
 
 
-    res.json({'msg':'okay', 'cause':'getting you the activities now sir', ret})
+    Promise.all(ret).then(rq => {
+        res.json({'msg':'okay', 'cause':'getting you the activities now sir', rq})
+    })
 })
 
 // for users to login into their accounts
