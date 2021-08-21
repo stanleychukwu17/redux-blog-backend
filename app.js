@@ -37,7 +37,7 @@ app.get('/blogs/all-blogs', (req, res, next) => {
     const ret = [];
     let blogId;
 
-    BlogsModel.find({}, async function (err, docs) {
+    BlogsModel.find({}, null, {sort: {_id: -1}}, async function (err, docs) {
         if (err) { res.json({'msg':'bad', 'cause':err}); return; }
 
         // fetches the total likes that this blog has received
@@ -82,11 +82,12 @@ app.get('/blogs/one-blog/:id', async (req, res, next) => {
 });
 
 // for posting of a new blog by a registered user
-app.post('/blogs/new-blog', (req, res, next) => {
+app.post('/blogs/new-blog', async (req, res, next) => {
     const {title, content, uid, date_p} = req.body;
 
     const newBlog = new BlogsModel(req.body);
-    newBlog.save();
+    const {_id:blogId} = await newBlog.save();
+    utFunc.saveThisActivity({'wch':'new_blog_posted', 'id1':uid, 'id2':blogId})
     res.json({'msg':'okay'});
 });
 
@@ -128,9 +129,10 @@ app.post('/blogs/deleteComment', async (req, res, next) => {
 })
 
 
+
 // for fetching of the activities section at the side of the page
 app.get('/activities/getActivities/', async (req, res, next) => {
-    const aDts = await ActsModel.find().exec();
+    const aDts = await ActsModel.find().sort({createdAt: -1}).exec();
     let actTxt = '', url ='';
     var ret = [];
 
@@ -145,8 +147,9 @@ app.get('/activities/getActivities/', async (req, res, next) => {
         if (wch === 'new_blog_comment') {
             actTxt = `${name} commented on a blog post`;
             url = `/BlogPage/${id2}?toComment=yes&commentId=${id3}`
-        } else if (wch === 'posted_new_blog_post') {
-
+        } else if (wch === 'new_blog_posted') {
+            actTxt = `${name} added a new blog post`;
+            url = `/BlogPage/${id2}`
         }
 
         return {id, name, actTxt, url};
@@ -157,6 +160,8 @@ app.get('/activities/getActivities/', async (req, res, next) => {
         res.json({'msg':'okay', 'cause':'getting you the activities now sir', rq})
     })
 })
+
+
 
 // for users to login into their accounts
 app.post('/users/login', (req, res, next) => {
