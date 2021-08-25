@@ -9,6 +9,7 @@ const app				= express();
 const UserModel = require('./models/UserModel')
 const UdtsModel = require('./models/SessModel'); // for storing of users hash for their login sessions
 const BlogsModel = require('./models/BlogsModel')
+const blogsComments = require('../models/Bcomments') // for blogs comments
 const ActsModel = require('./models/aActivities')
 const LmD = require('./models/BlogLikesModel')
 const utFunc = require('./pumba/ut')
@@ -156,7 +157,9 @@ app.get('/activities/getActivities/', async (req, res, next) => {
     })
 
     // loads the total blogs, total likes, total comments
-
+    const totBlogs = await BlogsModel.find().exec();
+    const totComments = await blogsComments.find().exec();
+    console.log(totBlogs.length, totComments.length);
 
     Promise.all(ret).then(rq => {
         res.json({'msg':'okay', 'cause':'getting you the activities now sir', rq})
