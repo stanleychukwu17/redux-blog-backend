@@ -155,6 +155,8 @@ app.get('/activities/getActivities/', async (req, res, next) => {
         return {id, name, actTxt, url};
     })
 
+    // loads the total blogs, total likes, total comments
+
 
     Promise.all(ret).then(rq => {
         res.json({'msg':'okay', 'cause':'getting you the activities now sir', rq})
