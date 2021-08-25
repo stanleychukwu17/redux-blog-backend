@@ -47,6 +47,9 @@ app.get('/blogs/all-blogs', (req, res, next) => {
 
             bambi.likes = await utFunc.get_likes_of_this_blog(ech._id);  // searches the mongodb collection for each blog likes
 
+            const comments = await utFunc.get_comments_on_dis_blog(ech._id); // get the total comments on this blog
+            bambi.comments = comments.total;
+
             const buser = await UserModel.findById(ech.uid, 'username').exec();
             if (buser) { bambi.author = buser.username; }
 
