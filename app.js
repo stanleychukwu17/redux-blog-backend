@@ -132,7 +132,7 @@ app.post('/blogs/deleteComment', async (req, res, next) => {
 
 // for fetching of the activities section at the side of the page
 app.get('/activities/getActivities/', async (req, res, next) => {
-    const aDts = await ActsModel.find().sort({createdAt: -1}).exec();
+    const aDts = await ActsModel.find().sort({createdAt: -1}).limit(8).exec();
     let actTxt = '', url ='';
     var ret = [];
 
