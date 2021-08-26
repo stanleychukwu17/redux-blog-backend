@@ -232,6 +232,6 @@ app.post('/users/register', (req, res, next) => {
 });
 
 /*
-we would add some functions
+we would add some functions to the blog to reduce
 
 */
