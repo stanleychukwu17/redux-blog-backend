@@ -232,5 +232,6 @@ app.post('/users/register', (req, res, next) => {
 });
 
 /*
+we would add some functions
 
 */
